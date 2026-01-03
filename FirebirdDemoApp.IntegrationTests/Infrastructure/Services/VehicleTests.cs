@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace FirebirdDemoApp.IntegrationTests.Infrastructure.Services;
 
 [TestFixture]
-public class VehicleServiceTests : BaseIntegrationTest
+public class VehicleTests : BaseIntegrationTest
 {
     [Test]
     public async Task Should_CreateVehicle_WhenDataIsCorrect()

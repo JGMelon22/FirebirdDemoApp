@@ -7,40 +7,40 @@ namespace FirebirdDemoApp.Infrastructure.Repositories;
 
 public class VehicleRepository(AppDbContext dbContext) : IVehicleRepository
 {
-    public async Task<ICollection<VehicleService>> GetAllAsync()
+    public async Task<ICollection<Vehicle>> GetAllAsync()
     {
         return await dbContext.Vehicles
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<VehicleService?> GetByIdAsync(int id)
+    public async Task<Vehicle?> GetByIdAsync(int id)
     {
         return await dbContext.Vehicles
             .FindAsync(id);
     }
 
-    public async Task<VehicleService> Create(VehicleService vehicleService)
+    public async Task<Vehicle> Create(Vehicle vehicle)
     {
-        await dbContext.Vehicles.AddAsync(vehicleService);
+        await dbContext.Vehicles.AddAsync(vehicle);
         await dbContext.SaveChangesAsync();
-        return vehicleService;
+        return vehicle;
     }
 
-    public async Task<VehicleService?> Update(VehicleService vehicleService)
+    public async Task<Vehicle?> Update(Vehicle vehicle)
     {
-        var vehicleToUpdate = await dbContext.Vehicles.FindAsync(vehicleService.Id);
+        var vehicleToUpdate = await dbContext.Vehicles.FindAsync(vehicle.Id);
 
         if (vehicleToUpdate == null)
             return null;
 
-        vehicleToUpdate.Name = vehicleService.Name;
-        vehicleToUpdate.Brand = vehicleService.Brand;
-        vehicleToUpdate.Price = vehicleService.Price;
-        vehicleToUpdate.ReleaseYear = vehicleService.ReleaseYear;
+        vehicleToUpdate.Name = vehicle.Name;
+        vehicleToUpdate.Brand = vehicle.Brand;
+        vehicleToUpdate.Price = vehicle.Price;
+        vehicleToUpdate.ReleaseYear = vehicle.ReleaseYear;
 
         await dbContext.SaveChangesAsync();
-        return vehicleService;
+        return vehicle;
     }
 
     public async Task<bool> DeleteAsync(int id)

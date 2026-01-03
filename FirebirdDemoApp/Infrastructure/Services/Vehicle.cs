@@ -6,9 +6,9 @@ using FirebirdDemoApp.Vehicles.Domains.Mappings;
 
 namespace FirebirdDemoApp.Infrastructure.Services;
 
-public class VehicleService(
+public class Vehicle(
     IVehicleRepository repository,
-    ILogger<VehicleService> logger,
+    ILogger<Vehicle> logger,
     MappingExtensions mappingExtensions) : IVehicleService
 {
     public async Task<Result<IEnumerable<VehicleResponse>>> GetAllAsync()

@@ -21,7 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseFirebird(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
-builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IVehicleService, Vehicle>();
 
 builder.Services.AddSingleton<MappingExtensions>();
 

@@ -20,7 +20,7 @@ public class VehicleTests : BaseIntegrationTest
             ReleaseYear: 2025);
 
         // Act
-        var result = await service.Create(vehicle);
+        var result = await service.CreateAsync(vehicle);
 
         // Assert
         Assert.That(result.IsSuccess, Is.True);
@@ -46,7 +46,7 @@ public class VehicleTests : BaseIntegrationTest
 
         foreach (var vehicle in vehicles)
         {
-            await service.Create(vehicle);
+            await service.CreateAsync(vehicle);
         }
 
         // Act
@@ -77,7 +77,7 @@ public class VehicleTests : BaseIntegrationTest
             ReleaseYear: 2024
         );
 
-        var createdVehicle = await service.Create(vehicle);
+        var createdVehicle = await service.CreateAsync(vehicle);
         int id = createdVehicle.Value!.Id;
 
         // Act
@@ -111,10 +111,10 @@ public class VehicleTests : BaseIntegrationTest
             Price: 25_000.00M,
             ReleaseYear: 2022);
 
-        var createdVehicle = await service.Create(vehicle);
+        var createdVehicle = await service.CreateAsync(vehicle);
 
         // Act
-        var result = await service.Update(createdVehicle.Value!.Id, vehicleUpdated);
+        var result = await service.UpdateAsync(createdVehicle.Value!.Id, vehicleUpdated);
 
         // Assert
         Assert.That(result.IsSuccess, Is.True);
@@ -134,7 +134,7 @@ public class VehicleTests : BaseIntegrationTest
             Price: 35_000.00M,
             ReleaseYear: 2025);
 
-        var createdVehicle = await service.Create(vehicle);
+        var createdVehicle = await service.CreateAsync(vehicle);
         int id = createdVehicle.Value!.Id;
 
         // Act

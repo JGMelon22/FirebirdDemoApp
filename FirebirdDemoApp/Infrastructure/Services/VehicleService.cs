@@ -52,7 +52,7 @@ public class VehicleService(
         }
     }
 
-    public async Task<Result<VehicleResponse>> Create(VehicleRequest vehicle)
+    public async Task<Result<VehicleResponse>> CreateAsync(VehicleRequest vehicle)
     {
         try
         {
@@ -73,7 +73,7 @@ public class VehicleService(
         }
     }
 
-    public async Task<Result<VehicleResponse?>> Update(int id, VehicleRequest vehicle)
+    public async Task<Result<VehicleResponse?>> UpdateAsync(int id, VehicleRequest vehicle)
     {
         try
         {
@@ -99,7 +99,7 @@ public class VehicleService(
         }
     }
 
-    public async Task<Result<Unit>> Delete(int id)
+    public async Task<Result<Unit>> DeleteAsync(int id)
     {
         try
         {

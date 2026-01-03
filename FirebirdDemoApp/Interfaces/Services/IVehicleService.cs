@@ -7,7 +7,7 @@ public interface IVehicleService
 {
     Task<Result<IEnumerable<VehicleResponse>>> GetAllAsync();
     Task<Result<VehicleResponse?>> GetByIdAsync(int id);
-    Task<Result<VehicleResponse>> Create(VehicleRequest vehicle);
-    Task<Result<VehicleResponse?>> Update(int id, VehicleRequest vehicle);
-    Task<Result<Unit>> Delete(int id);
+    Task<Result<VehicleResponse>> CreateAsync(VehicleRequest vehicle);
+    Task<Result<VehicleResponse?>> UpdateAsync(int id, VehicleRequest vehicle);
+    Task<Result<Unit>> DeleteAsync(int id);
 }

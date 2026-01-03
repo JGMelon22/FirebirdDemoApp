@@ -21,7 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseFirebird(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
-builder.Services.AddScoped<IVehicleService, Vehicle>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 builder.Services.AddSingleton<MappingExtensions>();
 
@@ -64,7 +64,7 @@ app.MapGet("/vehicles/{id}", async (IVehicleService service, [FromRoute] int id)
 
 app.MapPost("/vehicles", async (IVehicleService service, VehicleRequest vehicle) =>
     {
-        var response = await service.Create(vehicle);
+        var response = await service.CreateAsync(vehicle);
 
         return response.Match(
             Results.Ok,
@@ -75,7 +75,7 @@ app.MapPost("/vehicles", async (IVehicleService service, VehicleRequest vehicle)
 
 app.MapPatch("/{id}", async (IVehicleService service, int id, VehicleRequest vehicle) =>
     {
-        var response = await service.Update(id, vehicle);
+        var response = await service.UpdateAsync(id, vehicle);
 
         return response.Match(
             Results.Ok,

@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="FirebirdDemoApp.IntegrationTests/FirebirdDemoApp.IntegrationTests.csproj" />
   <Project Path="FirebirdDemoApp/FirebirdDemoApp.csproj" />
 </Solution>

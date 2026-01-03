@@ -12,6 +12,7 @@ Learning Firebird SQL integration with modern .NET applications, focusing on:
 - **Entity Framework Core 10** - ORM patterns with Firebird provider
 - **Vertical Slice Architecture** - Organizing code by feature rather than technical layers
 - **Result Pattern** - Functional error handling without exceptions
+- **Integration Testing** - Real database testing with Testcontainers
 
 ---
 
@@ -19,21 +20,26 @@ Learning Firebird SQL integration with modern .NET applications, focusing on:
 
 ```
 FirebirdDemoApp
-├── Infrastructure
-│   ├── Data                    # EF Core DbContext
-│   ├── Repositories            # Data access implementations
-│   └── Services                # Business logic services
-├── Interfaces
-│   ├── Repositories            # Repository contracts
-│   └── Services                # Service contracts
-├── Vehicles                    # Feature: Vehicle management
-│   └── Domains
-│       ├── DTOs                # Request/Response objects
-│       ├── Entities            # Domain entities
-│       └── Mappings            # Entity-DTO mappings
-├── Middlewares                 # Custom middlewares
-├── Migrations                  # EF Core migrations
-└── Shared                      # Shared utilities (Result pattern, etc.)
+├── FirebirdDemoApp/                    # Main API project
+│   ├── Infrastructure
+│   │   ├── Data                        # EF Core DbContext
+│   │   ├── Repositories                # Data access implementations
+│   │   └── Services                    # Business logic services
+│   ├── Interfaces
+│   │   ├── Repositories                # Repository contracts
+│   │   └── Services                    # Service contracts
+│   ├── Vehicles                        # Feature: Vehicle management
+│   │   └── Domains
+│   │       ├── DTOs                    # Request/Response objects
+│   │       ├── Entities                # Domain entities
+│   │       └── Mappings                # Entity-DTO mappings
+│   ├── Middlewares                     # Custom middlewares
+│   ├── Migrations                      # EF Core migrations
+│   └── Shared                          # Shared utilities (Result pattern, etc.)
+│
+└── FirebirdDemoApp.IntegrationTests/   # Integration test project
+    └── Infrastructure
+        └── Services                     # Integration tests for services
 ```
 
 ---
@@ -46,6 +52,12 @@ FirebirdDemoApp
 - **FirebirdSql.EntityFrameworkCore.Firebird 13.x** - EF Core provider
 - **Swagger** - API documentation
 - **Docker** - Database containerization
+
+### Testing
+- **NUnit** - Testing framework
+- **Testcontainers** - Docker-based integration testing
+- **Respawn** - Database cleanup between tests
+- **Microsoft.AspNetCore.Mvc.Testing** - WebApplicationFactory for API testing
 
 ---
 
@@ -124,3 +136,12 @@ The project uses **By Technical Architecture** pattern, which organizes code by 
 - Faster development without the overhead of multiple projects
 
 This approach is ideal for smaller applications and rapid prototyping while maintaining good separation of concerns.
+
+## 📚 Learning Resources
+
+This project was built using knowledge from:
+
+- [Integration Testing with Respawn in ASP.NET Core](https://medium.com/@niko.kantaria/integration-testing-with-respawn-in-asp-net-core-6de63dcfc7ba)
+- [Simple Integration Testing in .NET with Respawn & Testcontainers](https://medium.com/@hiddenhenry/simple-integration-testing-in-net-with-respawn-testcontainers-39f5de21740c)
+- [Testcontainers Integration Testing Using Docker in .NET](https://www.milanjovanovic.tech/blog/testcontainers-integration-testing-using-docker-in-dotnet)
+- [NUnit Documentation](https://docs.nunit.org/)

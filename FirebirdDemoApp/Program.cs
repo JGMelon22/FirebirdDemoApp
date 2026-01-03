@@ -86,7 +86,7 @@ app.MapPatch("/{id}", async (IVehicleService service, int id, VehicleRequest veh
 
 app.MapDelete("/{id}", async (IVehicleService service, int id) =>
     {
-        var response = await service.Delete(id);
+        var response = await service.DeleteAsync(id);
 
         return response.Match(
             Results.Ok,

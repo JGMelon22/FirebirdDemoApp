@@ -60,9 +60,9 @@ public class VehicleService(
 
             var createdVehicle = await repository.Create(vehicleToCreate);
 
-            logger.LogInformation("Vehicle successfully created: {Vehicle}", createdVehicle);
+            logger.LogInformation("Vehicle successfully created: {Vehicle}", vehicleToCreate);
 
-            var response = mappingExtensions.ToResponse(vehicleToCreate);
+            var response = mappingExtensions.ToResponse(createdVehicle);
 
             return Result<VehicleResponse>.Success(response);
         }
@@ -99,19 +99,19 @@ public class VehicleService(
         }
     }
 
-    public async Task<Result<bool>> Delete(int id)
+    public async Task<Result<bool>> DeleteAsync(int id)
     {
         try
         {
-            var vehicle = await repository.Delete(id);
+            var vehicle = await repository.GetByIdAsync(id);
 
-            if (vehicle)
+            if (vehicle is null)
             {
                 logger.LogWarning("Vehicle with id {Id} was not found", id);
                 return Result<bool>.Failure(Error.VehicleNotFound);
             }
 
-            var response = await repository.Delete(id);
+            var response = await repository.DeleteAsync(id);
             return Result<bool>.Success(response);
         }
         catch (Exception ex)

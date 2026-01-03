@@ -7,43 +7,43 @@ namespace FirebirdDemoApp.Infrastructure.Repositories;
 
 public class VehicleRepository(AppDbContext dbContext) : IVehicleRepository
 {
-    public async Task<ICollection<Vehicle>> GetAllAsync()
+    public async Task<ICollection<VehicleService>> GetAllAsync()
     {
         return await dbContext.Vehicles
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<Vehicle?> GetByIdAsync(int id)
+    public async Task<VehicleService?> GetByIdAsync(int id)
     {
         return await dbContext.Vehicles
             .FindAsync(id);
     }
 
-    public async Task<Vehicle> Create(Vehicle vehicle)
+    public async Task<VehicleService> Create(VehicleService vehicleService)
     {
-        await dbContext.Vehicles.AddAsync(vehicle);
+        await dbContext.Vehicles.AddAsync(vehicleService);
         await dbContext.SaveChangesAsync();
-        return vehicle;
+        return vehicleService;
     }
 
-    public async Task<Vehicle?> Update(Vehicle vehicle)
+    public async Task<VehicleService?> Update(VehicleService vehicleService)
     {
-        var vehicleToUpdate = await dbContext.Vehicles.FindAsync(vehicle.Id);
+        var vehicleToUpdate = await dbContext.Vehicles.FindAsync(vehicleService.Id);
 
         if (vehicleToUpdate == null)
             return null;
 
-        vehicleToUpdate.Name = vehicle.Name;
-        vehicleToUpdate.Brand = vehicle.Brand;
-        vehicleToUpdate.Price = vehicle.Price;
-        vehicleToUpdate.ReleaseYear = vehicle.ReleaseYear;
+        vehicleToUpdate.Name = vehicleService.Name;
+        vehicleToUpdate.Brand = vehicleService.Brand;
+        vehicleToUpdate.Price = vehicleService.Price;
+        vehicleToUpdate.ReleaseYear = vehicleService.ReleaseYear;
 
         await dbContext.SaveChangesAsync();
-        return vehicle;
+        return vehicleService;
     }
 
-    public async Task<bool> Delete(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var vehicleToDelete = await dbContext.Vehicles.FindAsync(id);
 

@@ -7,10 +7,10 @@ namespace FirebirdDemoApp.Vehicles.Domains.Mappings;
 [Mapper]
 public partial class MappingExtensions
 {
-    [MapperIgnoreTarget(nameof(Vehicle.Id))]
-    public partial Vehicle ToDomain(VehicleRequest vehicle);
+    [MapperIgnoreTarget(nameof(VehicleService.Id))]
+    public partial VehicleService ToDomain(VehicleRequest vehicle);
 
-    public partial VehicleResponse ToResponse(Vehicle vehicle);
+    public partial VehicleResponse ToResponse(VehicleService vehicleService);
 
-    public partial IEnumerable<VehicleResponse> ToResponse(IEnumerable<Vehicle> vehicle);
+    public partial IEnumerable<VehicleResponse> ToResponse(IEnumerable<VehicleService> vehicle);
 }

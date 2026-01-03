@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FirebirdDemoApp.Vehicles.Domains.Entities;
 
-public class Vehicle
+public class VehicleService
 {
     [Key]
     public int Id { get; set; }

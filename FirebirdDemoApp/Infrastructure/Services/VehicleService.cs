@@ -58,7 +58,7 @@ public class VehicleService(
         {
             var vehicleToCreate = mappingExtensions.ToDomain(vehicle);
 
-            var createdVehicle = await repository.Create(vehicleToCreate);
+            var createdVehicle = await repository.CreateAsync(vehicleToCreate);
 
             logger.LogInformation("Vehicle successfully created: {Vehicle}", createdVehicle);
 
@@ -80,7 +80,7 @@ public class VehicleService(
             var vehicleToUpdate = mappingExtensions.ToDomain(vehicle);
             vehicleToUpdate.Id = id;
 
-            var updatedVehicle = await repository.Update(vehicleToUpdate);
+            var updatedVehicle = await repository.UpdateAsync(vehicleToUpdate);
 
             if (updatedVehicle == null)
             {
@@ -99,25 +99,25 @@ public class VehicleService(
         }
     }
 
-    public async Task<Result<bool>> Delete(int id)
+    public async Task<Result<Unit>> Delete(int id)
     {
         try
         {
-            var vehicle = await repository.Delete(id);
+            var vehicle = await repository.GetByIdAsync(id);
 
-            if (vehicle)
+            if (vehicle is null)
             {
                 logger.LogWarning("Vehicle with id {Id} was not found", id);
-                return Result<bool>.Failure(Error.VehicleNotFound);
+                return Result<Unit>.Failure(Error.VehicleNotFound);
             }
 
-            var response = await repository.Delete(id);
-            return Result<bool>.Success(response);
+            await repository.DeleteAsync(id);
+            return Result<Unit>.Success(Unit.Value);
         }
         catch (Exception ex)
         {
             logger.LogError(ex.Message, "Something went wrong while deleting vehicle data");
-            return Result<bool>.Failure(Error.VehicleBadRequest);
+            return Result<Unit>.Failure(Error.VehicleBadRequest);
         }
     }
 }

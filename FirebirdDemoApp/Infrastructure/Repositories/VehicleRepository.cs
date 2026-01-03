@@ -20,14 +20,14 @@ public class VehicleRepository(AppDbContext dbContext) : IVehicleRepository
             .FindAsync(id);
     }
 
-    public async Task<Vehicle> Create(Vehicle vehicle)
+    public async Task<Vehicle> CreateAsync(Vehicle vehicle)
     {
         await dbContext.Vehicles.AddAsync(vehicle);
         await dbContext.SaveChangesAsync();
         return vehicle;
     }
 
-    public async Task<Vehicle?> Update(Vehicle vehicle)
+    public async Task<Vehicle?> UpdateAsync(Vehicle vehicle)
     {
         var vehicleToUpdate = await dbContext.Vehicles.FindAsync(vehicle.Id);
 
@@ -43,7 +43,7 @@ public class VehicleRepository(AppDbContext dbContext) : IVehicleRepository
         return vehicle;
     }
 
-    public async Task<bool> Delete(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var vehicleToDelete = await dbContext.Vehicles.FindAsync(id);
 

@@ -6,7 +6,7 @@ public interface IVehicleRepository
 {
     Task<ICollection<Vehicle>> GetAllAsync();
     Task<Vehicle?> GetByIdAsync(int id);
-    Task<Vehicle> Create(Vehicle vehicle);
-    Task<Vehicle?> Update(Vehicle vehicle);
+    Task<Vehicle> CreateAsync(Vehicle vehicle);
+    Task<Vehicle?> UpdateAsync(Vehicle vehicle);
     Task<bool> DeleteAsync(int id);
 }

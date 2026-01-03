@@ -6,9 +6,9 @@ using FirebirdDemoApp.Vehicles.Domains.Mappings;
 
 namespace FirebirdDemoApp.Infrastructure.Services;
 
-public class Vehicle(
+public class VehicleService(
     IVehicleRepository repository,
-    ILogger<Vehicle> logger,
+    ILogger<VehicleService> logger,
     MappingExtensions mappingExtensions) : IVehicleService
 {
     public async Task<Result<IEnumerable<VehicleResponse>>> GetAllAsync()
@@ -58,11 +58,11 @@ public class Vehicle(
         {
             var vehicleToCreate = mappingExtensions.ToDomain(vehicle);
 
-            var createdVehicle = await repository.Create(vehicleToCreate);
+            var createdVehicle = await repository.CreateAsync(vehicleToCreate);
 
-            logger.LogInformation("Vehicle successfully created: {Vehicle}", vehicleToCreate);
+            logger.LogInformation("Vehicle successfully created: {Vehicle}", createdVehicle);
 
-            var response = mappingExtensions.ToResponse(createdVehicle);
+            var response = mappingExtensions.ToResponse(vehicleToCreate);
 
             return Result<VehicleResponse>.Success(response);
         }
@@ -80,7 +80,7 @@ public class Vehicle(
             var vehicleToUpdate = mappingExtensions.ToDomain(vehicle);
             vehicleToUpdate.Id = id;
 
-            var updatedVehicle = await repository.Update(vehicleToUpdate);
+            var updatedVehicle = await repository.UpdateAsync(vehicleToUpdate);
 
             if (updatedVehicle == null)
             {
@@ -99,7 +99,7 @@ public class Vehicle(
         }
     }
 
-    public async Task<Result<bool>> DeleteAsync(int id)
+    public async Task<Result<Unit>> Delete(int id)
     {
         try
         {
@@ -108,16 +108,16 @@ public class Vehicle(
             if (vehicle is null)
             {
                 logger.LogWarning("Vehicle with id {Id} was not found", id);
-                return Result<bool>.Failure(Error.VehicleNotFound);
+                return Result<Unit>.Failure(Error.VehicleNotFound);
             }
 
-            var response = await repository.DeleteAsync(id);
-            return Result<bool>.Success(response);
+            await repository.DeleteAsync(id);
+            return Result<Unit>.Success(Unit.Value);
         }
         catch (Exception ex)
         {
             logger.LogError(ex.Message, "Something went wrong while deleting vehicle data");
-            return Result<bool>.Failure(Error.VehicleBadRequest);
+            return Result<Unit>.Failure(Error.VehicleBadRequest);
         }
     }
 }

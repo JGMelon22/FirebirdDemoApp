@@ -9,5 +9,5 @@ public interface IVehicleService
     Task<Result<VehicleResponse?>> GetByIdAsync(int id);
     Task<Result<VehicleResponse>> Create(VehicleRequest vehicle);
     Task<Result<VehicleResponse?>> Update(int id, VehicleRequest vehicle);
-    Task<Result<bool>> DeleteAsync(int id);
+    Task<Result<Unit>> Delete(int id);
 }

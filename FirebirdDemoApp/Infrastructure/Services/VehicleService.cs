@@ -13,111 +13,73 @@ public class VehicleService(
 {
     public async Task<Result<IEnumerable<VehicleResponse>>> GetAllAsync()
     {
-        try
-        {
-            var vehicles = await repository.GetAllAsync();
-            var response = mappingExtensions.ToResponse(vehicles);
 
-            logger.LogInformation("A total of {AmountOfVehicles} was found", vehicles.Count);
+        var vehicles = await repository.GetAllAsync();
+        var response = mappingExtensions.ToResponse(vehicles);
 
-            return Result<IEnumerable<VehicleResponse>>.Success(response);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex.Message, "Something went wrong while fetching vehicles");
-            return Result<IEnumerable<VehicleResponse>>.Failure(Error.VehicleBadRequest);
-        }
+        logger.LogInformation("A total of {AmountOfVehicles} was found", vehicles.Count);
+
+        return Result<IEnumerable<VehicleResponse>>.Success(response);
     }
 
     public async Task<Result<VehicleResponse?>> GetByIdAsync(int id)
     {
-        try
+
+        var vehicle = await repository.GetByIdAsync(id);
+
+        if (vehicle == null)
         {
-            var vehicle = await repository.GetByIdAsync(id);
-
-            if (vehicle == null)
-            {
-                logger.LogWarning("Vehicle with id {Id} was not found", id);
-                return Result<VehicleResponse?>.Failure(Error.VehicleNotFound);
-            }
-
-            var response = mappingExtensions.ToResponse(vehicle);
-
-            return Result<VehicleResponse?>.Success(response);
+            logger.LogWarning("Vehicle with id {Id} was not found", id);
+            return Result<VehicleResponse?>.Failure(Error.VehicleNotFound);
         }
-        catch (Exception ex)
-        {
-            logger.LogError(ex.Message, "Something went wrong while finding vehicle data");
-            return Result<VehicleResponse?>.Failure(Error.VehicleBadRequest);
-        }
+
+        var response = mappingExtensions.ToResponse(vehicle);
+
+        return Result<VehicleResponse?>.Success(response);
     }
 
     public async Task<Result<VehicleResponse>> CreateAsync(VehicleRequest vehicle)
     {
-        try
-        {
-            var vehicleToCreate = mappingExtensions.ToDomain(vehicle);
+        var vehicleToCreate = mappingExtensions.ToDomain(vehicle);
 
-            var createdVehicle = await repository.CreateAsync(vehicleToCreate);
+        var createdVehicle = await repository.CreateAsync(vehicleToCreate);
 
-            logger.LogInformation("Vehicle successfully created: {Vehicle}", createdVehicle);
+        logger.LogInformation("Vehicle successfully created: {Vehicle}", createdVehicle);
 
-            var response = mappingExtensions.ToResponse(vehicleToCreate);
+        var response = mappingExtensions.ToResponse(vehicleToCreate);
 
-            return Result<VehicleResponse>.Success(response);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex.Message, "Something went wrong while creating vehicle data");
-            return Result<VehicleResponse>.Failure(Error.VehicleBadRequest);
-        }
+        return Result<VehicleResponse>.Success(response);
     }
 
     public async Task<Result<VehicleResponse?>> UpdateAsync(int id, VehicleRequest vehicle)
     {
-        try
+        var vehicleToUpdate = mappingExtensions.ToDomain(vehicle);
+        vehicleToUpdate.Id = id;
+
+        var updatedVehicle = await repository.UpdateAsync(vehicleToUpdate);
+
+        if (updatedVehicle == null)
         {
-            var vehicleToUpdate = mappingExtensions.ToDomain(vehicle);
-            vehicleToUpdate.Id = id;
-
-            var updatedVehicle = await repository.UpdateAsync(vehicleToUpdate);
-
-            if (updatedVehicle == null)
-            {
-                logger.LogWarning("Vehicle with id {Id} was not found", id);
-                return Result<VehicleResponse?>.Failure(Error.VehicleNotFound);
-            }
-
-            var response = mappingExtensions.ToResponse(updatedVehicle);
-
-            return Result<VehicleResponse?>.Success(response);
+            logger.LogWarning("Vehicle with id {Id} was not found", id);
+            return Result<VehicleResponse?>.Failure(Error.VehicleNotFound);
         }
-        catch (Exception ex)
-        {
-            logger.LogError(ex.Message, "Something went wrong while updating vehicle data");
-            return Result<VehicleResponse?>.Failure(Error.VehicleBadRequest);
-        }
+
+        var response = mappingExtensions.ToResponse(updatedVehicle);
+
+        return Result<VehicleResponse?>.Success(response);
     }
 
     public async Task<Result<Unit>> DeleteAsync(int id)
     {
-        try
-        {
-            var vehicle = await repository.GetByIdAsync(id);
+        var vehicle = await repository.GetByIdAsync(id);
 
-            if (vehicle is null)
-            {
-                logger.LogWarning("Vehicle with id {Id} was not found", id);
-                return Result<Unit>.Failure(Error.VehicleNotFound);
-            }
-
-            await repository.DeleteAsync(id);
-            return Result<Unit>.Success(Unit.Value);
-        }
-        catch (Exception ex)
+        if (vehicle is null)
         {
-            logger.LogError(ex.Message, "Something went wrong while deleting vehicle data");
-            return Result<Unit>.Failure(Error.VehicleBadRequest);
+            logger.LogWarning("Vehicle with id {Id} was not found", id);
+            return Result<Unit>.Failure(Error.VehicleNotFound);
         }
+
+        await repository.DeleteAsync(id);
+        return Result<Unit>.Success(Unit.Value);
     }
 }

@@ -8,7 +8,7 @@ using Testcontainers.FirebirdSql;
 
 namespace FirebirdDemoApp.IntegrationTests;
 
-public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>
+public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IDisposable
 {
     private readonly FirebirdSqlContainer _dbContainer = new FirebirdSqlBuilder("jacobalberty/firebird:v4.0")
         .WithUsername("cool_user_test")

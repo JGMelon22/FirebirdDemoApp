@@ -7,9 +7,10 @@ namespace FirebirdDemoApp.IntegrationTests;
 [TestFixture]
 public abstract class BaseIntegrationTest
 {
-    private IntegrationTestWebAppFactory _factory;
-    protected IServiceScope Scope;
-    private AppDbContext _dbContext;
+    private IntegrationTestWebAppFactory _factory = null!;
+    private IServiceScope _scope = null!;
+    protected IVehicleService VehicleService = null!;
+    protected AppDbContext DbContext = null!;
 
     [OneTimeSetUp]
     public async Task OneTimeSetup()
@@ -21,17 +22,16 @@ public abstract class BaseIntegrationTest
     [SetUp]
     public void Setup()
     {
-        Scope = _factory.Services.CreateScope();
-
-        _dbContext = Scope.ServiceProvider
-            .GetRequiredService<AppDbContext>();
+        _scope = _factory.Services.CreateScope();
+        VehicleService = _scope.ServiceProvider.GetRequiredService<IVehicleService>();
+        DbContext = _scope.ServiceProvider.GetRequiredService<AppDbContext>();
     }
 
     [TearDown]
-    public void TearDown()
+    public async Task TearDown()
     {
-        Scope.Dispose();
-        _dbContext.Dispose();
+        await DbContext.DisposeAsync();
+        _scope.Dispose();
     }
 
     [OneTimeTearDown]

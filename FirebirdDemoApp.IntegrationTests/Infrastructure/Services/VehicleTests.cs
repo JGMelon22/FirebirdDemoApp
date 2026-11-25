@@ -1,4 +1,5 @@
-﻿using FirebirdDemoApp.Interfaces.Services;
+﻿using FirebirdDemoApp.Infrastructure.Services;
+using FirebirdDemoApp.Interfaces.Services;
 using FirebirdDemoApp.Vehicles.Domains.DTOs;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,8 +12,6 @@ public class VehicleTests : BaseIntegrationTest
     public async Task Should_CreateVehicle_WhenDataIsCorrect()
     {
         // Arrange
-        var service = Scope.ServiceProvider.GetRequiredService<IVehicleService>();
-
         var vehicle = new VehicleRequest(
             Name: "Mustang",
             Brand: "Ford",
@@ -20,7 +19,7 @@ public class VehicleTests : BaseIntegrationTest
             ReleaseYear: 2025);
 
         // Act
-        var result = await service.CreateAsync(vehicle);
+        var result = await VehicleService.CreateAsync(vehicle);
 
         // Assert
         Assert.That(result.IsSuccess, Is.True);
@@ -35,8 +34,6 @@ public class VehicleTests : BaseIntegrationTest
     public async Task Should_ReturnVehiclesList_WhenResultIsSuccess()
     {
         // Arrange
-        var service = Scope.ServiceProvider.GetRequiredService<IVehicleService>();
-
         List<VehicleRequest> vehicles =
         [
             new("Civic", "Honda", 27_500.00M, 2024),
@@ -46,11 +43,11 @@ public class VehicleTests : BaseIntegrationTest
 
         foreach (var vehicle in vehicles)
         {
-            await service.CreateAsync(vehicle);
+            await VehicleService.CreateAsync(vehicle);
         }
 
         // Act
-        var result = await service.GetAllAsync();
+        var result = await VehicleService.GetAllAsync();
 
         // Assert
         Assert.Multiple(() =>
@@ -68,8 +65,6 @@ public class VehicleTests : BaseIntegrationTest
     public async Task Should_ReturnSingleVehicle_WhenPassedIdExists()
     {
         // Arrange
-        var service = Scope.ServiceProvider.GetRequiredService<IVehicleService>();
-
         var vehicle = new VehicleRequest(
             Name: "RAV4",
             Brand: "Toyota",
@@ -77,11 +72,11 @@ public class VehicleTests : BaseIntegrationTest
             ReleaseYear: 2024
         );
 
-        var createdVehicle = await service.CreateAsync(vehicle);
+        var createdVehicle = await VehicleService.CreateAsync(vehicle);
         int id = createdVehicle.Value!.Id;
 
         // Act
-        var result = await service.GetByIdAsync(id);
+        var result = await VehicleService.GetByIdAsync(id);
 
         // Assert
         Assert.Multiple(() =>
@@ -96,8 +91,6 @@ public class VehicleTests : BaseIntegrationTest
     public async Task Should_UpdatedVehicle_WhenPassedIdExists()
     {
         // Arrange
-        var service = Scope.ServiceProvider.GetRequiredService<IVehicleService>();
-
         var vehicle = new VehicleRequest(
             Name: "Accord",
             Brand: "Honda",
@@ -111,10 +104,10 @@ public class VehicleTests : BaseIntegrationTest
             Price: 25_000.00M,
             ReleaseYear: 2022);
 
-        var createdVehicle = await service.CreateAsync(vehicle);
+        var createdVehicle = await VehicleService.CreateAsync(vehicle);
 
         // Act
-        var result = await service.UpdateAsync(createdVehicle.Value!.Id, vehicleUpdated);
+        var result = await VehicleService.UpdateAsync(createdVehicle.Value!.Id, vehicleUpdated);
 
         // Assert
         Assert.That(result.IsSuccess, Is.True);
@@ -126,19 +119,17 @@ public class VehicleTests : BaseIntegrationTest
     public async Task Should_RemoveVehicle_WhenIdIsPresent()
     {
         // Arrange
-        var service = Scope.ServiceProvider.GetRequiredService<IVehicleService>();
-
         var vehicle = new VehicleRequest(
             Name: "Mustang",
             Brand: "Ford",
             Price: 35_000.00M,
             ReleaseYear: 2025);
 
-        var createdVehicle = await service.CreateAsync(vehicle);
+        var createdVehicle = await VehicleService.CreateAsync(vehicle);
         int id = createdVehicle.Value!.Id;
 
         // Act
-        var result = await service.DeleteAsync(id);
+        var result = await VehicleService.DeleteAsync(id);
 
         // Assert
         Assert.That(result.IsSuccess, Is.True);
